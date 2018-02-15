@@ -1,8 +1,10 @@
 <?php
+header("Content-type: text/html; charset=utf-8");
 ini_set('max_execution_time', '0');
 require('simple_html_dom.php');
 
 $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : '';
+$merge = isset($_REQUEST['merge']) ? true : false;
 //$url = 'http://wenxue.m.iqiyi.com/book/reader-18l2gyeu1d-18l3ad45lv.html';
 if (empty($url)) {
     die('url is empty!');
@@ -26,14 +28,29 @@ do {
     curl_close($ch);
 
     $html = str_get_html($curl_return);
-    $title = $html->find('span[class="c-name-gap"]', 0);
-    $content = $html->find('section[class="m-chaper-content"]', 0);
-    $next = $html->find('a[class="c-link"]', 4);
-    $filename = explode(' ', $title->innertext);
+    $title = $html->find('span[class="c-name-gap"]', 0)->innertext;
+
+    //带HTML
+    //$content = $html->find('section[class="m-chaper-content"]', 0)->plaintext;
+
+    //不带HTML
+    $content = '';
+    foreach ($html->find('section[class="m-chaper-content"] > p') as $key => $value) {
+        $content .= "$value->innertext\n";
+    }
+
+    $filename = explode(' ', $title);
     $filename = findNumber($filename[0]) . '.txt';
-    file_put_contents("txt/$filename", "$title->innertext\n$content->plaintext\n");
+
+    if ($merge) {
+        // output one file
+        file_put_contents("txt/all.txt", "$title$content\n", FILE_APPEND);
+    } else {
+        file_put_contents("txt/$filename", "$title$content\n");
+    }
 
     $chapter_id = '';
+    $next = $html->find('a[class="c-link"]', 4);
     if ($next->changechapterid) {
         $chapter_id = $next->changechapterid;
     }
