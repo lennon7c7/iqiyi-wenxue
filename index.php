@@ -3,6 +3,7 @@ header("Content-type: text/html; charset=utf-8");
 ini_set('max_execution_time', '0');
 require('simple_html_dom.php');
 
+$filename = "all.txt";
 $url = isset($_REQUEST['url']) ? $_REQUEST['url'] : '';
 $not_merge = isset($_REQUEST['not_merge']) ? true : false;
 if ($url) {
@@ -39,7 +40,6 @@ if ($url) {
 
         if (!$not_merge) {
             // output one file
-            $filename = "all.txt";
             file_put_contents($filename, "$title$content\n", FILE_APPEND);
         } else {
             $filename = explode(' ', $title);
@@ -97,10 +97,10 @@ function findNumber($str = '')
     <button type="submit">Submit</button>
 </form>
 
-<?php if (!empty($filename) && file_exists($filename)) { ?>
+<?php if (file_exists($filename)) { ?>
     <a href="<?php echo $filename; ?>" id="download" download>all.txt</a>
 
     <script type="text/javascript">
-        //document.getElementById('download').click();
+        document.getElementById('download').click();
     </script>
 <?php } ?>
