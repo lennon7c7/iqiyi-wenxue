@@ -11,7 +11,7 @@ function getTxtFile()
     if (false != ($handle = opendir($dir))) {
         $i = 0;
         while (false !== ($file = readdir($handle))) {
-            if (strpos($file, '.txt')) {
+            if (stripos($file, '.txt')) {
                 $dirArray[$i] = $file;
                 $i++;
             }
