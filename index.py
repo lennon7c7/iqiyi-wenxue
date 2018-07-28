@@ -55,7 +55,7 @@ class MyHTMLParser(HTMLParser):
                     return each[1]
             return None
 
-        if self.book_title == '' and self.tag == 'div' and _attr(self.attrs, 'class') == 'c-name' and data != '':
+        if self.book_title == '' and self.tag == 'span' and _attr(self.attrs, 'class') == 'reader-page' and data != '':
             self.book_title = data
 
         if self.tag == 'span' and _attr(self.attrs, 'class') == 'c-name-gap' and data != '':
@@ -64,7 +64,6 @@ class MyHTMLParser(HTMLParser):
         if self.tag == 'p' and _attr(self.attrs, 'class') == 'c-contentB' and data != '':
             self.chapter_content = self.chapter_content + '\n    ' + data
 
-content_string = ''
 i = 1
 while (chapter_id != ''):
     url_new = url_template % (chapter_id)
@@ -77,16 +76,15 @@ while (chapter_id != ''):
     if chapter_title_prefix != '':
         parser.chapter_title = (chapter_title_prefix % (i)) + parser.chapter_title
 
-    content_string += parser.chapter_title
-    content_string += parser.chapter_content
-    content_string += '\n\n'
     print unicode(parser.chapter_title, 'utf-8')
+    if parser.book_title != '':
+        fo = open(unicode(parser.book_title, 'utf-8') + '.txt', 'a+')
+    else:
+        fo = open(book_id + '.txt', 'a+')
+    fo.write(parser.chapter_title)
+    fo.write(parser.chapter_content)
+    fo.write('\n\n')
+    fo.close()
     i += 1
 
 print unicode(parser.book_title, 'utf-8')
-
-# write into file
-fo = open(unicode(parser.book_title, 'utf-8') + '.txt', 'w')
-fo.write(content_string)
-fo.close()
-
