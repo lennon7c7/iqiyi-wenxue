@@ -12,7 +12,7 @@ function getTxtFile()
         $i = 0;
         while (false !== ($file = readdir($handle))) {
             if (stripos($file, '.txt')) {
-                $dirArray[$i] = $file;
+                $dirArray[$i] = iconv('gb2312', 'utf-8', $file);
                 $i++;
             }
         }
