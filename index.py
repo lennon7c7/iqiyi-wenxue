@@ -13,13 +13,13 @@ book_id = url.split('-')[-2]
 chapter_id = url.split('-')[-1].split('.')[0]
 url_template = 'https://wenxue.iqiyi.com/book/reader-%s-%s.html?fr=207680739' % (book_id, '%s')
 
-chapter_title_prefix = raw_input('input chapter title prefix here: ')
-if chapter_title_prefix == '':
-    #chapter_title_prefix = 'chapter %s - '
-    chapter_title_prefix = '第%s章 - '
+#chapter_title_prefix = '第%s章 - '
+chapter_title_prefix = raw_input('input chapter title prefix here(chapter %s - ): ')
+if chapter_title_prefix != '':
     print 'default: ', unicode(chapter_title_prefix, 'utf-8')
 
 user_agent = 'User-Agent:Mozilla/5.0 (iPhone; CPU iPhone OS 8_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12A366 Safari/600.1.4)'
+# use browser console get new: document.cookie
 cookie = 'sourcePage=aladdin'
 headers = { 'User-Agent' : user_agent, 'Cookie' : cookie}
 
